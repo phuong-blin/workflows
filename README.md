@@ -20,4 +20,4 @@ To create a submodule, stand in the `workflows` repo, then run:
 ```
 git submodule add <url-to-repo>
 ``` 
-where <url-to-repo> can be HTTPS url, or SSH url.
+where `<url-to-repo>` can be HTTPS url, or SSH url.
