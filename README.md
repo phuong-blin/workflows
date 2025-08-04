@@ -10,10 +10,8 @@ workflows-repo/
 │   ├── service-1/          # submodule
 │   ├── service-2/          # submodule
 │   └── ...                 # submodule
-├── magefile.go             # for build
-├── docker-compose.yml      # for local testing
-└── scripts/
-    └── update-submodules.sh
+└── magefile.go             # for build
+
 ```
 
 To create a submodule, stand in the `workflows` repo, then run: 
