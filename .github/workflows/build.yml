@@ -1,0 +1,48 @@
+name: autobuild 
+run-name: Demonstration for subrepo & GitHub Action workflows 
+
+# define which event can trigger the workflow 
+on: 
+  # define external repo (submodule) event 
+  repository_dispatch: # webhook trigger
+    types: [service_updated]
+  workflow_dispatch: # manual trigger (this creates buttons on Github UI that allows us to trigger build with a button)
+    inputs: 
+      service_name: 
+        description: 'Service to build'
+        required: true
+        type: string 
+      branch: 
+        description: 'Branch to build'
+        required: true 
+        type: string 
+      commit_sha: 
+        description: 'Commit SHA (Oprional)'
+        required: false 
+        type: string 
+
+jobs: 
+  build: 
+    strategy: 
+      matrix: [ubuntu-latest, macos-latest, windows-latest]
+  runs-on: ${{ matrix.os }}
+
+  steps: 
+  - name: Checkout submodules 
+    uses: actions/checkout@v4
+    with:
+      submodules: recursive 
+  - name: Setup Go 
+    uses: actions/setup-go@v4 
+    with: 
+      go-version: '1.24'
+  - name: Setup mage 
+    run: go install github.com/magefile.mage@latest 
+  - name: Build 
+    run: mage build 
+  - name: Upload artifacts
+    uses: actions/upload-artifact@v4 
+    with: 
+      name: build-${{ matrix.os }}-${{ github.run_number}}
+      path: dist/ 
+      retention-days: 7
