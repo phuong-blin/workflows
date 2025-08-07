@@ -41,7 +41,7 @@ func Build() error {
 }
 
 func buildService(svcName string) error {
-	svcPath := filepath.Join("services")
+	svcPath := svcName
 	outputName := svcName
 	if GOOS == "windows" {
 		outputName += ".exe"
@@ -58,31 +58,6 @@ func buildService(svcName string) error {
 	return sh.RunWith(env, "go", "build", "-o", outputPath, fmt.Sprintf("./%s", svcPath))
 }
 
-func BuildAll() error {
-	mg.Deps(Clean)
-	
-	platforms := []struct{ os, arch string }{
-		{"linux", "amd64"},
-		{"darwin", "amd64"},
-		{"darwin", "arm64"},
-		{"windows", "amd64"},
-	}
-	
-	for _, platform := range platforms {
-		fmt.Printf("Building for %s/%s...\n", platform.os, platform.arch)
-		
-		services := []string{"service-1", "service-2"}
-		
-		for _, service := range services {
-			if err := buildService(service); err != nil {
-				return fmt.Errorf("failed to build %s for %s/%s: %w", 
-					service, platform.os, platform.arch, err)
-			}
-		}
-	}
-	
-	return nil
-}
 
 func Demo() error {
 	mg.Deps(Build)
