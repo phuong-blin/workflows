@@ -35,7 +35,7 @@ jobs:
         submodules: recursive 
     - name: Update submodules to latest
       run: |
-        git submodule update --remote --ff-only
+        git submodule update --remote --merge
     - name: Setup Go 
       uses: actions/setup-go@v4 
       with: 
